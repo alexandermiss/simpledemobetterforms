@@ -14,4 +14,4 @@ class Empleado(models.Model):
     )
     categoria = models.CharField(choices=CATEGORIAS, max_length=2)
     salario = models.DecimalField(max_digits=10, decimal_places=2)
-    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, related_name='individuos', related_query_name='individuo')

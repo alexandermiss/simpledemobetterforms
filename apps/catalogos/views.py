@@ -1,20 +1,32 @@
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, UpdateView
 
 from .forms import EmpleadoPersonaModelForm
+from .models import Persona, Empleado
 
 
 class EmpleadoCreateView(CreateView):
     form_class = EmpleadoPersonaModelForm
     template_name = 'formulario.html'
+    success_url = reverse_lazy('success')
 
-    def form_valid(self, form):
-        persona = form['persona'].save()
-        empleado = form['empleado'].save(commit=False)
-        empleado.persona = persona
-        empleado.save()
-        return HttpResponseRedirect(reverse('success'))
+
+class EmpleadoUpdateView(UpdateView):
+    model = Empleado
+    form_class = EmpleadoPersonaModelForm
+    template_name = 'formulario.html'
+    success_url = reverse_lazy('success')
+
+
+    def get_form_kwargs(self):
+        kwargs = super(EmpleadoUpdateView, self).get_form_kwargs()
+        
+        kwargs.update(instance={
+            'persona': self.object.persona,
+            'empleado': self.object
+        })
+        return kwargs
 
 
 class SuccessView(TemplateView):

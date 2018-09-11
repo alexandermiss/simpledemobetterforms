@@ -22,3 +22,15 @@ class EmpleadoPersonaModelForm(MultiModelForm):
         'persona': PersonaModelForm,
         'empleado': EmpleadoModelForm,
     }
+
+    def save(self, commit=True):
+        objects = super(EmpleadoPersonaModelForm, self).save(commit=False)
+
+        if commit:
+            persona = objects['persona']
+            persona.save()
+            empleado = objects['empleado']
+            empleado.persona = persona
+            empleado.save()
+
+        return objects
