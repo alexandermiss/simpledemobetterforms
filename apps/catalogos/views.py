@@ -18,11 +18,11 @@ class EmpleadoUpdateView(UpdateView):
     template_name = 'formulario.html'
     success_url = reverse_lazy('success')
 
-
     def get_form_kwargs(self):
         kwargs = super(EmpleadoUpdateView, self).get_form_kwargs()
         
         kwargs.update(instance={
+            'domicilio': self.object.persona.domicilio,
             'persona': self.object.persona,
             'empleado': self.object
         })
